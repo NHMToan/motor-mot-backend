@@ -8,10 +8,12 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UsePipes,
   UseGuards
 } from "@nestjs/common";
 import { ValidationPipe } from "@nestjs/common";
+import type { Request } from "express";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { QueryProductsDto } from "./dto/query-products.dto";
@@ -43,8 +45,15 @@ export class ProductsController {
       transform: false
     })
   )
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  create(
+    @Body() createProductDto: CreateProductDto,
+    @Req() req: Request
+  ) {
+    return this.productsService.create({
+      ...createProductDto,
+      descriptionBlocks: req.body.descriptionBlocks,
+      galleryImages: req.body.galleryImages
+    });
   }
 
   @UseGuards(JwtAuthGuard)
@@ -57,9 +66,14 @@ export class ProductsController {
   )
   update(
     @Param("id") id: string,
-    @Body() updateProductDto: UpdateProductDto
+    @Body() updateProductDto: UpdateProductDto,
+    @Req() req: Request
   ) {
-    return this.productsService.update(id, updateProductDto);
+    return this.productsService.update(id, {
+      ...updateProductDto,
+      descriptionBlocks: req.body.descriptionBlocks,
+      galleryImages: req.body.galleryImages
+    });
   }
 
   @UseGuards(JwtAuthGuard)
