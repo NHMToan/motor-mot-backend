@@ -8,8 +8,10 @@ import {
   Patch,
   Post,
   Query,
+  UsePipes,
   UseGuards
 } from "@nestjs/common";
+import { ValidationPipe } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { QueryProductsDto } from "./dto/query-products.dto";
@@ -35,12 +37,24 @@ export class ProductsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
+  @UsePipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: false
+    })
+  )
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch(":id")
+  @UsePipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: false
+    })
+  )
   update(
     @Param("id") id: string,
     @Body() updateProductDto: UpdateProductDto
