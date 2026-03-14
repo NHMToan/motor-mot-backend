@@ -105,12 +105,12 @@ export class ProductsService {
       data: {
         ...restUpdateData,
         slug,
-        ...(descriptionBlocks
+        ...(descriptionBlocks !== undefined
           ? {
               descriptionBlocks: descriptionBlocks as Prisma.InputJsonValue
             }
           : {}),
-        ...(galleryImages
+        ...(galleryImages !== undefined
           ? {
               galleryImages: galleryImages as Prisma.InputJsonValue
             }

@@ -1,4 +1,5 @@
 import { ProductCategory } from "@prisma/client";
+import { Transform } from "class-transformer";
 import {
   IsArray,
   IsBoolean,
@@ -31,8 +32,9 @@ export class UpdateProductDto {
   description?: string;
 
   @IsOptional()
+  @Transform(({ value }) => value)
   @IsArray()
-  descriptionBlocks?: Array<Record<string, unknown>>;
+  descriptionBlocks?: unknown[];
 
   @IsOptional()
   @IsNumber()
@@ -44,6 +46,7 @@ export class UpdateProductDto {
   imageUrl?: string;
 
   @IsOptional()
+  @Transform(({ value }) => value)
   @IsArray()
   galleryImages?: string[];
 
